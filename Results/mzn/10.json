@@ -1,0 +1,568 @@
+{
+    "01. 3D Path Approach - Final Model - GECODE.mzn": {
+        "time": 300,
+        "optimal": false,
+        "obj": "N/A",
+        "sol": []
+    },
+    "02. 3D Path Approach - Final Model - CHUFFED.mzn": {
+        "time": 2,
+        "optimal": true,
+        "obj": 244,
+        "sol": [
+            [
+                3
+            ],
+            [
+                4
+            ],
+            [
+                11
+            ],
+            [
+                1
+            ],
+            [
+                13
+            ],
+            [
+                7,
+                5
+            ],
+            [
+                10,
+                8
+            ],
+            [
+                12
+            ],
+            [
+                2
+            ],
+            [
+                6,
+                9
+            ]
+        ]
+    },
+    "03. 3D Path Approach - Final Model - ORTOOLS.mzn": {
+        "time": 6,
+        "optimal": true,
+        "obj": 244,
+        "sol": [
+            [
+                13
+            ],
+            [
+                12
+            ],
+            [
+                11
+            ],
+            [
+                10
+            ],
+            [
+                9
+            ],
+            [
+                8
+            ],
+            [
+                7
+            ],
+            [
+                6
+            ],
+            [
+                5
+            ],
+            [
+                3,
+                2,
+                4,
+                1
+            ]
+        ]
+    },
+    "04. 2D Path Approach - Final Model - GECODE.mzn": {
+        "time": 0,
+        "optimal": true,
+        "obj": 244,
+        "sol": [
+            [
+                10
+            ],
+            [
+                9
+            ],
+            [
+                8
+            ],
+            [
+                7
+            ],
+            [
+                6
+            ],
+            [
+                5
+            ],
+            [
+                4,
+                13
+            ],
+            [
+                3
+            ],
+            [
+                2,
+                12
+            ],
+            [
+                1,
+                11
+            ]
+        ]
+    },
+    "05. 2D Path Approach - Final Model - CHUFFED.mzn": {
+        "time": 0,
+        "optimal": true,
+        "obj": 244,
+        "sol": [
+            [
+                7
+            ],
+            [
+                9
+            ],
+            [
+                5,
+                3,
+                1
+            ],
+            [
+                2
+            ],
+            [
+                8
+            ],
+            [
+                6
+            ],
+            [
+                11
+            ],
+            [
+                4
+            ],
+            [
+                13,
+                10
+            ],
+            [
+                12
+            ]
+        ]
+    },
+    "06. 2D Path Approach - Final Model - ORTOOLS.mzn": {
+        "time": 3,
+        "optimal": true,
+        "obj": 244,
+        "sol": [
+            [
+                13
+            ],
+            [
+                12
+            ],
+            [
+                11
+            ],
+            [
+                10
+            ],
+            [
+                9
+            ],
+            [
+                8
+            ],
+            [
+                7
+            ],
+            [
+                6
+            ],
+            [
+                4
+            ],
+            [
+                1,
+                2,
+                3,
+                5
+            ]
+        ]
+    },
+    "07. 2D Sequence Base Approach - Final Model - GECODE.mzn": {
+        "time": 0,
+        "optimal": true,
+        "obj": 244,
+        "sol": [
+            [
+                7
+            ],
+            [
+                6
+            ],
+            [
+                12
+            ],
+            [
+                11,
+                13
+            ],
+            [
+                2,
+                4
+            ],
+            [
+                5
+            ],
+            [
+                1
+            ],
+            [
+                9
+            ],
+            [
+                10,
+                8
+            ],
+            [
+                3
+            ]
+        ]
+    },
+    "08. 2D Sequence Base Approach - Final Model - CHUFFED.mzn": {
+        "time": 0,
+        "optimal": true,
+        "obj": 244,
+        "sol": [
+            [
+                8
+            ],
+            [
+                6,
+                9,
+                3
+            ],
+            [
+                7
+            ],
+            [
+                11,
+                13
+            ],
+            [
+                5
+            ],
+            [
+                2
+            ],
+            [
+                4
+            ],
+            [
+                10
+            ],
+            [
+                12
+            ],
+            [
+                1
+            ]
+        ]
+    },
+    "09. 2D Sequence Base Approach - Final Model - ORTOOLS.mzn": {
+        "time": 2,
+        "optimal": true,
+        "obj": 244,
+        "sol": [
+            [
+                13
+            ],
+            [
+                12
+            ],
+            [
+                11
+            ],
+            [
+                10
+            ],
+            [
+                9
+            ],
+            [
+                8
+            ],
+            [
+                7
+            ],
+            [
+                6
+            ],
+            [
+                5,
+                4
+            ],
+            [
+                3,
+                2,
+                1
+            ]
+        ]
+    },
+    "10. 2D Heuristic Sequence Approach - Final Model - ORTOOLS.mzn": {
+        "time": 1,
+        "optimal": true,
+        "obj": 244,
+        "sol": [
+            [
+                1
+            ],
+            [
+                2
+            ],
+            [
+                3
+            ],
+            [
+                4
+            ],
+            [
+                5
+            ],
+            [
+                6
+            ],
+            [
+                12
+            ],
+            [
+                7,
+                9
+            ],
+            [
+                8,
+                10
+            ],
+            [
+                11,
+                13
+            ]
+        ]
+    },
+    "11. 2D Heuristic Sequence Approach - Final Model - CHUFFED.mzn": {
+        "time": 0,
+        "optimal": true,
+        "obj": 244,
+        "sol": [
+            [
+                4
+            ],
+            [
+                3,
+                9
+            ],
+            [
+                8
+            ],
+            [
+                2
+            ],
+            [
+                12
+            ],
+            [
+                7,
+                11
+            ],
+            [
+                13
+            ],
+            [
+                5,
+                6
+            ],
+            [
+                1
+            ],
+            [
+                10
+            ]
+        ]
+    },
+    "12. 2D Heuristic Sequence Approach - Final Model - GECODE.mzn": {
+        "time": 0,
+        "optimal": true,
+        "obj": 244,
+        "sol": [
+            [
+                6,
+                9
+            ],
+            [
+                1,
+                3
+            ],
+            [
+                7
+            ],
+            [
+                2,
+                12
+            ],
+            [
+                10
+            ],
+            [
+                4
+            ],
+            [
+                13
+            ],
+            [
+                8
+            ],
+            [
+                5
+            ],
+            [
+                11
+            ]
+        ]
+    },
+    "13. 2D Heuristic Sequence Approach - Final Model - ORTOOLS CP.mzn": {
+        "time": 0,
+        "optimal": true,
+        "obj": 244,
+        "sol": [
+            [
+                4
+            ],
+            [
+                7
+            ],
+            [
+                9,
+                6
+            ],
+            [
+                1
+            ],
+            [
+                10
+            ],
+            [
+                8
+            ],
+            [
+                13,
+                11
+            ],
+            [
+                3
+            ],
+            [
+                5
+            ],
+            [
+                12,
+                2
+            ]
+        ]
+    },
+    "14. 2D Heuristic Sequence Approach - Final Model - GECODE WITHOUT SYM.mzn": {
+        "time": 0,
+        "optimal": true,
+        "obj": 244,
+        "sol": [
+            [
+                13
+            ],
+            [
+                6,
+                1
+            ],
+            [
+                11
+            ],
+            [
+                8,
+                2
+            ],
+            [
+                3,
+                5
+            ],
+            [
+                9
+            ],
+            [
+                12
+            ],
+            [
+                4
+            ],
+            [
+                7
+            ],
+            [
+                10
+            ]
+        ]
+    },
+    "15. 2D Heuristic Sequence Approach - Final Model - GECODE WITHOUT RAR.mzn": {
+        "time": 0,
+        "optimal": true,
+        "obj": 244,
+        "sol": [
+            [
+                12
+            ],
+            [
+                1,
+                8
+            ],
+            [
+                2,
+                5
+            ],
+            [
+                11,
+                7
+            ],
+            [
+                4
+            ],
+            [
+                3
+            ],
+            [
+                6
+            ],
+            [
+                13
+            ],
+            [
+                9
+            ],
+            [
+                10
+            ]
+        ]
+    }
+}

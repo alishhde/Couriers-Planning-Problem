@@ -1,0 +1,212 @@
+{
+    "01. 3D Path Approach - Final Model - GECODE.mzn": {
+        "time": 0,
+        "optimal": true,
+        "obj": 206,
+        "sol": [
+            [
+                2
+            ],
+            [
+                1,
+                3
+            ]
+        ]
+    },
+    "02. 3D Path Approach - Final Model - CHUFFED.mzn": {
+        "time": 0,
+        "optimal": true,
+        "obj": 206,
+        "sol": [
+            [
+                2
+            ],
+            [
+                1,
+                3
+            ]
+        ]
+    },
+    "03. 3D Path Approach - Final Model - ORTOOLS.mzn": {
+        "time": 0,
+        "optimal": true,
+        "obj": 206,
+        "sol": [
+            [
+                2
+            ],
+            [
+                1,
+                3
+            ]
+        ]
+    },
+    "04. 2D Path Approach - Final Model - GECODE.mzn": {
+        "time": 0,
+        "optimal": true,
+        "obj": 206,
+        "sol": [
+            [
+                2
+            ],
+            [
+                1,
+                3
+            ]
+        ]
+    },
+    "05. 2D Path Approach - Final Model - CHUFFED.mzn": {
+        "time": 0,
+        "optimal": true,
+        "obj": 206,
+        "sol": [
+            [
+                2
+            ],
+            [
+                1,
+                3
+            ]
+        ]
+    },
+    "06. 2D Path Approach - Final Model - ORTOOLS.mzn": {
+        "time": 0,
+        "optimal": true,
+        "obj": 206,
+        "sol": [
+            [
+                2
+            ],
+            [
+                1,
+                3
+            ]
+        ]
+    },
+    "07. 2D Sequence Base Approach - Final Model - GECODE.mzn": {
+        "time": 0,
+        "optimal": true,
+        "obj": 206,
+        "sol": [
+            [
+                2
+            ],
+            [
+                1,
+                3
+            ]
+        ]
+    },
+    "08. 2D Sequence Base Approach - Final Model - CHUFFED.mzn": {
+        "time": 0,
+        "optimal": true,
+        "obj": 206,
+        "sol": [
+            [
+                2
+            ],
+            [
+                1,
+                3
+            ]
+        ]
+    },
+    "09. 2D Sequence Base Approach - Final Model - ORTOOLS.mzn": {
+        "time": 0,
+        "optimal": true,
+        "obj": 206,
+        "sol": [
+            [
+                2
+            ],
+            [
+                1,
+                3
+            ]
+        ]
+    },
+    "10. 2D Heuristic Sequence Approach - Final Model - ORTOOLS.mzn": {
+        "time": 0,
+        "optimal": true,
+        "obj": 206,
+        "sol": [
+            [
+                2
+            ],
+            [
+                1,
+                3
+            ]
+        ]
+    },
+    "11. 2D Heuristic Sequence Approach - Final Model - CHUFFED.mzn": {
+        "time": 0,
+        "optimal": true,
+        "obj": 206,
+        "sol": [
+            [
+                2
+            ],
+            [
+                1,
+                3
+            ]
+        ]
+    },
+    "12. 2D Heuristic Sequence Approach - Final Model - GECODE.mzn": {
+        "time": 300,
+        "optimal": false,
+        "obj": 206,
+        "sol": [
+            [
+                2
+            ],
+            [
+                1,
+                3
+            ]
+        ]
+    },
+    "13. 2D Heuristic Sequence Approach - Final Model - ORTOOLS CP.mzn": {
+        "time": 0,
+        "optimal": true,
+        "obj": 206,
+        "sol": [
+            [
+                2
+            ],
+            [
+                1,
+                3
+            ]
+        ]
+    },
+    "14. 2D Heuristic Sequence Approach - Final Model - GECODE WITHOUT SYM.mzn": {
+        "time": 300,
+        "optimal": false,
+        "obj": 206,
+        "sol": [
+            [
+                2
+            ],
+            [
+                1,
+                3
+            ]
+        ]
+    },
+    "15. 2D Heuristic Sequence Approach - Final Model - GECODE WITHOUT RAR.mzn": {
+        "time": 0,
+        "optimal": true,
+        "obj": 206,
+        "sol": [
+            [
+                2
+            ],
+            [
+                1,
+                3
+            ]
+        ]
+    }
+}

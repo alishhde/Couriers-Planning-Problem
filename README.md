@@ -202,20 +202,25 @@ int_search(
 
 The final phase involves refining the $length\_of\_path$ variables, which determine how long each courier’s route will be.
 - `Variable Selection`: again focusing on the most constrained variables first.
- - `Value Selection`: a heuristic that picks a “middle” value from the domain. 
+
+- `Value Selection`: a heuristic that picks a “middle” value from the domain. 
+
 - `Strategy`: $complete$.
 	Additionally, we have also tried using some other interesting annotation that changes the way solver interacts with the variables and the solution it finds.
 
-- Relax and Reconstruct
+- Relax and Reconstruc <br>
 	$$:: relax\_and\_reconstruct(array1d(sequence), 80)$$
+	 <br>
 	Simple large neighborhood search strategy: This annotation says that upon restart, for each variable in sequence , the probability of it being fixed to the previous solution is 80 percent.
 
-- Restart Policy
-	$$:: restart\_linear(num\_item)$$
+- Restart Polic <br>
+	$$:: restart\_linear(num\_item)$$ 
+	<br>
 	Restart with linear sequence scaled by `num_item`. Alternatively you could use, `restart_constant(scale)` for restarting after constant number of nodes each time `scale`, `restart_luby(scale)` for restarting with Luby sequence scaled by scale.
 
-- Objective
-	$$minimize\ max\_route\_found$$
+- Objective <br>
+	$$minimize\ max\_route\_found$$  
+	<br>
 	By applying these layered search strategies (layered with help of (`seq_search` which takes these integer search in input and applies them sequentially) — focusing first on route structure (`sequence`), then on item assignment (`bin`), and finally on route length (`length_of_path`)—and combining them with relaxation, reconstruction, and periodic restarts, the solver aims to efficiently explore the solution space. 
 
 <br><br>
@@ -224,36 +229,9 @@ The final phase involves refining the $length\_of\_path$ variables, which determ
 Empirically, we understood that at the end, what matters most in achieving better results and optimal or near-optimal solutions is applying good modeling to the problem. Real-world problems, which are usually as large as the given-above-ten instances, themselves have lots of values and possibilities. Hence, it is important to implement the modeling part in a way that does not increase these variations and makes the solution more clear, easier, and accessible to the solver. In this problem, although we have tried three different ways of modeling, each of which was better than the other, at the end, the only thing that helped us the most was the heuristic approach we chose. Considering a relaxed and fair distribution of items led us toward choosing a smaller dimension in the 4th modeling, leading to significantly fewer variables for the solver. 
 Precisely speaking, with help of `Gecode Gist`, which is a solver configuration that demonstrates the search tree and especially they number of variables, we figured out that in the first modeling for the path matrix, the solver was dealing with `414720` boolean variables, which, mathematically, equals to ${num\_point} \space *  \space {num\_point} \space *  \space {num\_courier}$. This value equals to `20736` variables of domain '0..20', which in terms of variables was a significant improvement. Although one might say considering the number of values in the domain makes the equation the same, in practice, since we are applying constraint constraints to the domain of the variables, usually the available values in the domain is less than what math suggests. Math is only suggesting the values before applying any constraints. However, we cannot omit or not consider the variables, and solvers always have to find a value for them from their domain. Each variable equals to one decision. 
 The result improved even more on the 3rd modeling, and we had only `2880` variables of domain `1..144`. Respectively, we were seeing and experiencing the resultt of this change in parameters based on the solutions we were getting on this and other hard instances. 
-But the game changer was the 4th modeling. In which, by applying heuristic, we achieved `200` variables with the domain of `0..144` values on INSTANCE11!! 
+But the game changer was the 4th modeling. In which, by applying heuristic, we achieved `200` variables with the domain of `0..144` values on INSTANCE11!
 
 This experimental study helped us understand how modeling can affect the solver and the exploration it might help. More importantly, we learnt that a good heuristic and relaxation, at the end, are what will save you on the real large-size data. 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

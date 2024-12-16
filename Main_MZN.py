@@ -214,7 +214,7 @@ def project_result_generator(inst_range, model_path, one_instance=False):
         model_instance = minizinc_manager.create_model(path_to_model=model_path, data_instance_num=inst_num)
         result = minizinc_manager.solve_instance(model_instance=model_instance)
         sol_dict = minizinc_manager.solution_to_dict(solution=result.solution)
-        minizinc_manager.save_to_JSON(sol_dict, filename=inst_num, parent_path='Results/mzn results - cp', keep_prev=True)
+        minizinc_manager.save_to_JSON(sol_dict, filename=inst_num, parent_path='Results/mzn', keep_prev=True)
     else:
         for inst_num in inst_range:
             print("Instance Number: ", inst_num, " for model: ", model_path)
@@ -227,7 +227,7 @@ def project_result_generator(inst_range, model_path, one_instance=False):
             model_instance = minizinc_manager.create_model(path_to_model=model_path, data_instance_num=inst_num)
             result = minizinc_manager.solve_instance(model_instance=model_instance)
             sol_dict = minizinc_manager.solution_to_dict(solution=result.solution)
-            minizinc_manager.save_to_JSON(sol_dict, filename=inst_num, parent_path='Results/mzn results - cp', keep_prev=True)
+            minizinc_manager.save_to_JSON(sol_dict, filename=inst_num, parent_path='Results/mzn', keep_prev=True)
 
 def get_solver_name(solver):
             solver_mapping = {
@@ -237,7 +237,7 @@ def get_solver_name(solver):
                 ' CHUFFED.mzn': ('chuffed', 'chuffed'),
                 ' ORTOOLS.mzn': ('cp-sat', 'cp-sat'),
                 ' ORTOOLS CP.mzn': ('cp', 'cp'),
-                ' GUROBI.mzn': ('gurobi', 'Gurobi')
+                ' GUROBI.mzn': ('gurobi', 'Gurobi') # Gurobi is not available 
             }
             return solver_mapping.get(solver, (None, None))
 
