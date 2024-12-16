@@ -1,0 +1,9 @@
+num_courier = 2;
+num_item = 3;
+courier_capacity = [18, 30];
+item_size = [20, 17, 6];
+distance_mat = [| 0, 21, 86, 99, 
+| 21, 0, 71, 80, 
+| 92, 71, 0, 61, 
+| 59, 80, 61, 0, 
+|];
