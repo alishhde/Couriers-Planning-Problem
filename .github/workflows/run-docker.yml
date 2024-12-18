@@ -23,7 +23,7 @@ jobs:
       # Step 3: Run the Docker container
       # This runs your entire project as defined by CMD in the Dockerfile
       - name: Run Docker container
-        run: docker run --rm -v ${{ github.workspace }}/res:/app/res mzn-app "all-all"
+        run: docker run --rm -v ${{ github.workspace }}/res:/app/res mzn-app "16-12"
 
       - name: Upload results
         uses: actions/upload-artifact@v4
