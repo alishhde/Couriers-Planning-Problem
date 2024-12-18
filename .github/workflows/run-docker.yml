@@ -1,0 +1,26 @@
+name: Run Project with Docker
+
+# Trigger on push to main branch or on pull requests targeting main
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-run-docker:
+    runs-on: ubuntu-latest
+    steps:
+      # Step 1: Checkout the repository code
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Step 2: Build the Docker image
+      # This will use the Dockerfile at the root of your repo to build the image
+      - name: Build Docker image
+        run: docker build -t mzn-app .
+
+      # Step 3: Run the Docker container
+      # This runs your entire project as defined by CMD in the Dockerfile
+      - name: Run the Docker container
+        run: docker run mzn-app
