@@ -43,4 +43,4 @@ RUN echo "=== Python Version ===" && \
     minizinc --solvers
 
 # Default command
-ENTRYPOINT ["python3", "/app/Main_MZN.py"]
+ENTRYPOINT ["python3", "/app/Docker_Main_MZN.py"]
