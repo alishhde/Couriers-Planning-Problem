@@ -168,9 +168,9 @@ int_search(
 
 This step focuses on the $sequence$ variables, which define the actual visiting order of nodes (items and depot) for each courier. The strategy used here is:
 - `Which variable to search for correct assignment?` `Sequence` Variable. 
-- `How to select the variable inside the array of variable?` `dom_w_deg` (domain size weighted by degree), which prioritizes variables that appear in the largest number of constraints or have the most constrained domains. This can help in quickly identifying critical route assignments.
-- `How to select a value for that variable?`: $indomain\_random$, which chooses values randomly within the allowed domain. Random selection diversifies the search, helping the solver escape local minima or heavily constrained areas.
-- `What is the search strategy?` $complete$, which is an exhaustive exploration of the search space.
+- `How to select the variable inside the array of variable?` `dom_w_deg` (Choose the variable with largest domain, divided by the number of attached constraints weighted by how often they have caused failure), which prioritizes variables that appear in the largest number of constraints or have the most constrained domains. This can help in quickly identifying critical route assignments.
+- `How to select a value for that variable?`: `indomain_random`, which chooses values randomly within the allowed domain. Random selection diversifies the search, helping the solver escape local minima or heavily constrained areas.
+- `What is the search strategy?` `complete`, which is an exhaustive exploration of the search space.
 
 
 ### Item Assignment Optimization
@@ -219,6 +219,10 @@ The final phase involves refining the $length\_of\_path$ variables, which determ
 	$$:: restart\_linear(num\_item)$$ 
 	<br>
 	Restart with linear sequence scaled by `num_item`. Alternatively you could use, `restart_constant(scale)` for restarting after constant number of nodes each time `scale`, `restart_luby(scale)` for restarting with Luby sequence scaled by scale.
+
+	<br>
+
+	Restart search is much more robust in finding solutions, since it can avoid getting stuck in a non-productive area of the search. Note that restart search does not make much sense if the underlying search strategy does not do something different the next time it starts at the top. The simplest way to ensure that something is different in each restart is to use some randomization, either in variable choice or value choice. Alternatively some variable selection strategies make use of information gathered from earlier search and hence will give different behaviour, for example dom_w_deg.
 
 - Objective <br>
 	$$minimize\ max\_route\_found$$  
