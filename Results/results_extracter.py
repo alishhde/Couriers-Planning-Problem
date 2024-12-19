@@ -1,46 +1,56 @@
 import json
 import os
+from collections import defaultdict
 
-# Change the instances you want to read from input
-DO_INST = 1
-UP_INST = 22
-
-
-# Initialize the Markdown table header
-header = "| Model | " + " | ".join([f"inst{i}" for i in range(DO_INST, UP_INST)]) + " |\n"
-header += "| :---: | " + " | ".join([":---:" for _ in range(DO_INST, UP_INST)]) + " |\n"
-
-# Initialize the Markdown table rows
-rows = {}
-
-# Process each JSON file in the Results/mzn folder
-for i in range(DO_INST, UP_INST):
-    file_path = f'Results/mzn/{i}.json'
-    with open(file_path) as f:
-        data = json.load(f)
+def extract_results():
+    # Store results as: {instance_num: {model_name: objective}}
+    results = defaultdict(dict)
+    model_names = set()
     
-    for model, details in data.items():
-        if model not in rows:
-            rows[model] = ["N/A"] * 21
-        
-        time = details["time"]
-        optimal = details["optimal"]
-        obj = details["obj"]
-        
-        if obj == "N/A":
-            result = "N/A"
-        elif optimal:
-            result = f"`**`{obj} ({time}s)"
-        else:
-            result = f"`*`{obj} ({time}s)"
-        
-        rows[model][i-1] = result
+    # Read all JSON files
+    for i in range(1, 22):
+        file_path = f"Results/mzn/{i}.json"
+        try:
+            with open(file_path, 'r') as f:
+                data = json.load(f)
+                
+            # Extract model names and objectives
+            for model_name, model_data in data.items():
+                model_names.add(model_name)
+                # Format objective value based on optimality
+                obj_value = model_data['obj']
+                if model_data['optimal']:
+                    obj_value = f"{obj_value} `**`"
+                elif model_data['sol'] != 'N/A':
+                    obj_value = f"{obj_value} `*`"
+                results[i][model_name] = obj_value
+        except FileNotFoundError:
+            print(f"Warning: File {file_path} not found")
+            continue
 
-# Construct the Markdown table
-markdown_table = header
-for model, results in rows.items():
-    model_name = model.split("-")[0].split('. ')[1]
-    markdown_table += f"| {model_name} | " + " | ".join(results) + " |\n"
+    # Generate markdown table
+    model_names = sorted(list(model_names))
+    
+    # Header
+    markdown = "| Instance |"
+    for model in model_names:
+        markdown += f" {model.split('.')[1].split(' - Final Model - ')[0] + " " + model.split('.')[1].split(' - Final Model - ')[1]} |"
+    markdown += "\n"
+    
+    # Separator
+    markdown += "|" + "|".join(["-" * 10 for _ in range(len(model_names) + 1)]) + "|\n"
+    
+    # Data rows
+    for i in range(1, 22):
+        markdown += f"| {i} |"
+        for model in model_names:
+            value = results[i].get(model, "-")
+            markdown += f" {value} |"
+        markdown += "\n"
+    
+    # Write to file
+    with open("results_table.md", "w") as f:
+        f.write(markdown)
 
-# Print the Markdown table
-print(markdown_table)
+if __name__ == "__main__":
+    extract_results()
