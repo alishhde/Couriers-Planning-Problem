@@ -13,17 +13,17 @@ Since item number equals the city number, we don't need to formulate the city, a
 
 ## Modelings
 ### 1st Formulation (3-Dimensional Arc-Based Matrix)
-In the initial modeling approach we implemented a 3D boolean matrix, $path_{i,j,k}$, where each entry indicates whether courier $k$ travels from item $i$ to item $j$. This representation effectively demonstrated paths for smaller instances (up to 10 items), but struggled with scalability as the number of couriers and items increased. For larger instances, it often failed to find any solution within a reasonable time.
+In the initial modeling approach we implemented a 3D boolean matrix, $path_{i,j,k}$, where each entry indicates whether courier $k$ travels from item $i$ to item $j$. This representation effectively demonstrated paths for smaller instances, but struggled with scalability as the number of couriers and items increased. For larger instances, it often failed to find any solution within a reasonable time.
 
 <br>
 
 ### 2nd Formulation (Reduced-Dimension Arc-Based Matrix)
-To mitigate the scalability issues, the second modeling reduced the dimensionality by having one dimension of the matrix, couriers, as the domain, resulting in a 2D matrix $path_{i,j}$ with values representing which courier travels from item $i$ to $j$. Although this significantly cut down on the number of variables and improved computational speed, it did not sufficiently enhance the quality of solutions for larger instances. The model could find solutions for slightly larger instances than before but still struggled to reach near-optimal solutions for instances above ten items.
+To mitigate the scalability issues, the second modeling reduced the dimensionality by having one dimension of the matrix, couriers, as the domain, resulting in a 2D matrix $path_{i,j}$ with values representing which courier travels from item $i$ to $j$. Although this significantly cut down on the number of variables and improved computational speed, it did not sufficiently enhance the quality of solutions for larger instances. The model could find solutions for slightly larger instances than before but still struggled to reach near-optimal solutions for large instances.
 
 <br>
 
 ### 3rd Formulation (Couriers-by-Distribution Points Matrix with Arc-Based Approach)
-Informed by real-world observations that the number of couriers is typically much smaller than the number of items, the third approach reorganized the matrix to have couriers as rows and distribution points as columns. Each variable, $sequence_{k,n}$ represented which distribution point $n$ courier $k$ would go to next, with values from a limited set of distribution points. This remained an arc-based method (where a value in the matrix indicates a move from one point to the next) and improved performance and solution quality further. For instances larger than 10, this approach yielded faster exploration and even found one more optimal solution than previous modelings. However, we were looking for faster and more optimal or near-optimal solutions.  
+Considering that in the real world, the number of couriers is typically smaller than the number of items, the third approach reorganized the matrix to have couriers as rows and distribution points as columns. Each variable, $sequence_{k,n}$ represented which distribution point $n$ courier $k$ would go to next. 
 
 <br>
 
@@ -38,26 +38,28 @@ In the following, we take a look at this last modeling more in detail describing
 
 ## Decision Variables 
 Let's see how this last model is implemented.
-- **traveled_distance** (`array[couriers] of var int`)
+- **traveled_distance** (`array[couriers] of var int`) <br>
 	This variable records the total distance traveled by each courier.
 	- Defined per courier, it aggregates the distances corresponding to that courier’s assigned route.
 	- The solver will determine values that minimize these distances, or incorporate them into objective functions or constraints, depending on the model’s goals.
-- **bin** (`array[items] of var couriers`)
+- **bin** (`array[items] of var couriers`) <br>
 	This variable assigns each item to exactly one courier.
 	- For every item, the variable takes on a courier’s index as a value, indicating which courier is responsible for delivering that item.
 	- The solver chooses these assignments in a way that satisfies capacity, route feasibility, or fairness constraints and contributes to an optimal or near-optimal solution.
-- **sequence** (`array[couriers, num_nodes] of var 0..num_points`)
+- **sequence** (`array[couriers, num_nodes] of var 0..num_points`) <br>
 	This variable defines the visiting order of distribution points for each courier.
 	- Each courier has a sequence of nodes they will visit, where each entry in the sequence array represents the next distribution point on that courier’s route.
-	- The indexing set, **num_nodes**, is chosen as a fixed upper bound on the maximum route length: $$max\_pl = \lceil \frac{num\_item}{num\_courier} \rceil + 2.$$
+	- The indexing set, **num_nodes**, is chosen as a fixed upper bound on the maximum route length: 
+  	$$max\_pl = \lceil \frac{num\_item}{num\_courier} \rceil + 2.$$
 	 This ensures enough “slots” to accommodate each courier’s entire route, including depot visits, however, it also oblige each courier to not take items more than this defined `max_pl` which may not be correct in all the cases.
-	- Values of 0 can be used to represent dummy or non-utilized positions if the courier does not need to use all available nodes.
-	- The solver’s job is to determine a sequence that forms a feasible path for each courier, respecting constraints on travel distance and item assignments.
-- **length_of_path** (`array[couriers] of var 3..max_pl`)
+	- `0` is used to deactivate variables that solver must not travers.
+- **length_of_path** (`array[couriers] of var 3..max_pl`) <br>
 	This variable specifies the actual number of nodes used in each courier’s route.
 	- The domain starts at 3 to ensure that each courier’s route includes at least a start depot, at least one item, and an end depot.
 	- By setting this variable, the model can differentiate between allocated route “slots” (in **sequence**) and the actual length of the route.
 	- During optimization, this helps enforce minimum route requirements and ensures each courier is assigned at least one item.
+
+<br>
 
 These decision variables work together to determine how items are allocated to couriers, the sequence of visits for each courier, and the associated distances traveled. The **bin** variable controls item-to-courier assignments, the **sequence** array and **length_of_path** variables govern the exact ordering and number of stops each courier makes, and the **traveled_distance** variable measures how costly these choices are in terms of travel distance.
 
@@ -235,7 +237,7 @@ This experimental study helped us understand how modeling can affect the solver 
 
 
 
-## Table of Output
+## Table of results
 The following list, is the table of output based on the models. Here's a briefly explanation of the models that you may find useful when running the models. Having 4 different modelings and 3 different variants based on the solvers:
 - Modeling 1
 	- When running this model you must not expect it running on instances above 10 successfully. This model is not suggested, however if you want to test it, it is best suited for the first 10 instances.
@@ -251,27 +253,22 @@ The following list, is the table of output based on the models. Here's a briefly
 - `NSol` No solution found
 - `Results` column gives the maximum value of the set of distances that each courier traveled
 
-|           | Gecode 6.3 |       |
-|:---------:|:----------:|:-----:|
-| Instances |  Results   | Time  |
-|     1     |  `**` 14   | 150ms |
-|     2     |  `**` 226  | 300ms |
-|     3     |  `**` 12   | 210ms |
-|     4     |            |       |
-|     5     |            |       |
-|     6     |     s      |   s   |
-|     7     |     s      |   s   |
-|     8     |     s      |   s   |
-|     9     |     s      |   s   |
-|    10     |     s      |   s   |
-|    11     |     s      |   s   |
-|    12     |     s      |   s   |
-|    13     |     s      |   s   |
-|    14     |     s      |   s   |
-|    15     |     s      |   s   |
-|    16     |     s      |   s   |
-|    17     |     s      |   s   |
-|    18     |     s      |   s   |
-|    19     |     s      |   s   |
-|    20     |     s      |   s   |
-|    21     |     s      |   s   |
+<br><br>
+
+| Model | inst1 | inst2 | inst3 | inst4 | inst5 | inst6 | inst7 | inst8 | inst9 | inst10 | inst11 | inst12 | inst13 | inst14 | inst15 | inst16 | inst17 | inst18 | inst19 | inst20 | inst21 |
+| :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| 3D Path Approach  | `**`14 (0s) | `**`226 (0s) | `**`12 (0s) | `**`220 (24s) | `**`206 (0s) | `**`322 (0s) | `**`167 (6s) | `**`186 (126s) | N/A | N/A | N/A | N/A | N/A | N/A | N/A | `*`785 (300s) | N/A | N/A | N/A | N/A | N/A |
+| 3D Path Approach  | `**`14 (0s) | `**`226 (0s) | `**`12 (0s) | `**`220 (0s) | `**`206 (0s) | `**`322 (0s) | `**`167 (28s) | `**`186 (0s) | `**`436 (3s) | `**`244 (2s) | N/A | N/A | N/A | N/A | N/A | N/A | N/A | N/A | N/A | N/A | N/A |
+| 3D Path Approach  | `**`14 (0s) | `**`226 (1s) | `**`12 (0s) | `**`220 (1s) | `**`206 (0s) | `**`322 (0s) | `*`187 (300s) | `**`186 (2s) | `**`436 (6s) | `**`244 (6s) | N/A | N/A | `*`838 (300s) | N/A | N/A | N/A | N/A | N/A | N/A | N/A | N/A |
+| 2D Path Approach  | `**`14 (0s) | `**`226 (0s) | `**`12 (0s) | `**`220 (0s) | `**`206 (0s) | `**`322 (0s) | `**`167 (2s) | `**`186 (0s) | `**`436 (0s) | `**`244 (0s) | `*`926 (300s) | N/A | `*`1148 (300s) | N/A | N/A | `*`382 (300s) | N/A | N/A | `*`595 (300s) | N/A | N/A |
+| 2D Path Approach  | `**`14 (0s) | `**`226 (0s) | `**`12 (0s) | `**`220 (0s) | `**`206 (0s) | `**`322 (0s) | `**`167 (11s) | `**`186 (0s) | `**`436 (0s) | `**`244 (0s) | N/A | N/A | N/A | N/A | N/A | N/A | N/A | N/A | N/A | N/A | N/A |
+| 2D Path Approach  | `**`14 (0s) | `**`226 (1s) | `**`12 (0s) | `**`220 (1s) | `**`206 (0s) | `**`322 (0s) | `*`172 (300s) | `**`186 (1s) | `**`436 (2s) | `**`244 (3s) | N/A | N/A | `*`1420 (300s) | N/A | N/A | N/A | N/A | N/A | N/A | N/A | N/A |
+| 2D Sequence Base Approach  | `*`14 (300s) | `**`226 (0s) | `*`12 (300s) | `**`220 (0s) | `**`206 (0s) | `**`322 (0s) | `**`167 (0s) | `**`186 (0s) | `**`436 (0s) | `**`244 (0s) | `*`505 (300s) | `**`346 (84s) | `*`452 (300s) | `*`762 (300s) | `*`818 (300s) | `**`286 (5s) | `*`1518 (300s) | `*`647 (300s) | `**`334 (13s) | N/A | `*`525 (300s) |
+| 2D Sequence Base Approach  | `**`14 (0s) | `**`226 (0s) | `**`12 (0s) | `**`220 (0s) | `**`206 (0s) | `**`322 (0s) | `**`167 (0s) | `**`186 (0s) | `**`436 (0s) | `**`244 (0s) | N/A | N/A | `*`1500 (300s) | N/A | N/A | `*`325 (300s) | N/A | N/A | N/A | N/A | N/A |
+| 2D Sequence Base Approach  | `**`14 (0s) | `**`226 (1s) | `**`12 (0s) | `**`220 (0s) | `**`206 (0s) | `**`322 (0s) | `**`167 (84s) | `**`186 (1s) | `**`436 (2s) | `**`244 (2s) | `*`918 (300s) | `*`662 (300s) | `*`1388 (300s) | N/A | N/A | `*`375 (300s) | N/A | N/A | `*`597 (300s) | N/A | `*`1070 (300s) |
+| 2D Heuristic Sequence Approach  | `**`14 (0s) | `**`226 (0s) | `**`12 (0s) | `**`220 (0s) | `**`206 (0s) | `**`322 (0s) | `**`167 (3s) | `**`186 (0s) | `**`436 (1s) | `**`244 (1s) | `*`773 (300s) | `*`495 (300s) | `*`1054 (300s) | N/A | N/A | `**`286 (19s) | N/A | `*`959 (300s) | `**`334 (59s) | N/A | `*`854 (300s) |
+| 2D Heuristic Sequence Approach  | `**`14 (0s) | `**`226 (0s) | `**`12 (0s) | `**`220 (0s) | `**`206 (0s) | `**`322 (0s) | `**`167 (12s) | `**`186 (0s) | `**`436 (0s) | `**`244 (0s) | N/A | `*`610 (300s) | `*`1236 (300s) | N/A | N/A | `**`286 (11s) | N/A | N/A | `*`450 (300s) | N/A | N/A |
+| 2D Heuristic Sequence Approach  | `*`14 (300s) | `**`226 (0s) | `*`12 (300s) | `**`220 (0s) | `*`206 (300s) | `**`322 (0s) | `**`167 (0s) | `**`186 (0s) | `**`436 (0s) | `**`244 (0s) | `*`305 (300s) | `**`346 (2s) | `*`454 (300s) | `*`491 (300s) | `*`581 (300s) | `**`286 (0s) | N/A | `*`389 (300s) | `**`334 (0s) | N/A | `**`374 (35s) |
+| 2D Heuristic Sequence Approach  | `**`14 (0s) | `**`226 (0s) | `**`12 (0s) | `**`220 (0s) | `**`206 (0s) | `**`322 (0s) | `**`167 (1s) | `**`186 (0s) | `**`436 (0s) | `**`244 (0s) | N/A | `*`610 (300s) | `*`1236 (300s) | N/A | N/A | `**`286 (11s) | N/A | N/A | `*`450 (300s) | N/A | N/A |
+| 2D Heuristic Sequence Approach  | `*`14 (300s) | `**`226 (0s) | `*`12 (300s) | `**`220 (0s) | `*`206 (300s) | `**`322 (0s) | `**`167 (0s) | `**`186 (0s) | `**`436 (0s) | `**`244 (0s) | `*`305 (300s) | `**`346 (2s) | `*`442 (300s) | `*`461 (300s) | N/A | `**`286 (0s) | `*`1221 (300s) | `*`360 (300s) | `**`334 (0s) | N/A | `**`374 (222s) |
+| 2D Heuristic Sequence Approach  | `**`14 (0s) | `**`226 (0s) | `**`12 (0s) | `**`220 (0s) | `**`206 (0s) | `**`322 (0s) | `**`167 (0s) | `**`186 (0s) | `**`436 (0s) | `**`244 (0s) | `*`698 (300s) | `*`370 (300s) | `*`1036 (300s) | `*`1096 (300s) | `*`1088 (300s) | `**`286 (0s) | N/A | `*`887 (300s) | `**`334 (21s) | N/A | `*`756 (300s) |

@@ -1,0 +1,92 @@
+{
+    "01. 3D Path Approach - Final Model - GECODE.mzn": {
+        "time": 300,
+        "optimal": false,
+        "obj": "N/A",
+        "sol": []
+    },
+    "02. 3D Path Approach - Final Model - CHUFFED.mzn": {
+        "time": 300,
+        "optimal": false,
+        "obj": "N/A",
+        "sol": []
+    },
+    "03. 3D Path Approach - Final Model - ORTOOLS.mzn": {
+        "time": 300,
+        "optimal": false,
+        "obj": "N/A",
+        "sol": []
+    },
+    "04. 2D Path Approach - Final Model - GECODE.mzn": {
+        "time": 300,
+        "optimal": false,
+        "obj": "N/A",
+        "sol": []
+    },
+    "05. 2D Path Approach - Final Model - CHUFFED.mzn": {
+        "time": 300,
+        "optimal": false,
+        "obj": "N/A",
+        "sol": []
+    },
+    "06. 2D Path Approach - Final Model - ORTOOLS.mzn": {
+        "time": 300,
+        "optimal": false,
+        "obj": "N/A",
+        "sol": []
+    },
+    "07. 2D Sequence Base Approach - Final Model - GECODE.mzn": {
+        "time": 300,
+        "optimal": false,
+        "obj": "N/A",
+        "sol": []
+    },
+    "08. 2D Sequence Base Approach - Final Model - CHUFFED.mzn": {
+        "time": 300,
+        "optimal": false,
+        "obj": "N/A",
+        "sol": []
+    },
+    "09. 2D Sequence Base Approach - Final Model - ORTOOLS.mzn": {
+        "time": 300,
+        "optimal": false,
+        "obj": "N/A",
+        "sol": []
+    },
+    "10. 2D Heuristic Sequence Approach - Final Model - ORTOOLS.mzn": {
+        "time": 300,
+        "optimal": false,
+        "obj": "N/A",
+        "sol": []
+    },
+    "11. 2D Heuristic Sequence Approach - Final Model - CHUFFED.mzn": {
+        "time": 300,
+        "optimal": false,
+        "obj": "N/A",
+        "sol": []
+    },
+    "12. 2D Heuristic Sequence Approach - Final Model - GECODE.mzn": {
+        "time": 300,
+        "optimal": false,
+        "obj": "N/A",
+        "sol": []
+    },
+    "13. 2D Heuristic Sequence Approach - Final Model - ORTOOLS CP.mzn": {
+        "time": 300,
+        "optimal": false,
+        "obj": "N/A",
+        "sol": []
+    },
+    "14. 2D Heuristic Sequence Approach - Final Model - GECODE WITHOUT SYM.mzn": {
+        "time": 300,
+        "optimal": false,
+        "obj": "N/A",
+        "sol": []
+    },
+    "15. 2D Heuristic Sequence Approach - Final Model - GECODE WITHOUT RAR.mzn": {
+        "time": 300,
+        "optimal": false,
+        "obj": "N/A",
+        "sol": []
+    }
+}
