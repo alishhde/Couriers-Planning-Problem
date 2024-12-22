@@ -71,7 +71,7 @@ In this problem our objective is to minimize the maximum traveled distance by an
 	This variable captures the longest distance traveled by any courier. By focusing on this maximum value, the solver can aim to reduce the disparity between couriers’ workloads and minimize the overall maximum route length.
 
 - lb ($lb$) <br>
-	$$lb = \max({ distance\_mat[num\_points, i] + distance\_mat[i, num\_points] \mid i \in items })$$
+	$$lb = \max({ distance\_mat[num\_points, i] + distance\_mat[i, num\_points] \mid i \in items })$$ <br>
 	This represents a lower bound on the minimum travel distance required. It is derived from the longest single round trip from the depot to an item and back. No courier can have a route shorter than this value if they are assigned at least one item.
 
 - consecutive ($consec$) <br>
@@ -83,7 +83,7 @@ In this problem our objective is to minimize the maximum traveled distance by an
 	The upper bound sets a limit on the maximum allowed route length for a courier. It is computed based on a division of the total consecutive distance among the number of couriers, plus the lower bound. This provides a controlled search space, ensuring that solutions with excessively long routes are not considered.
 
 - min_round_trip ($min\\_round\\_trip$) <br>
-	$$min\_round\\_trip = \min({ distance\_mat[num\_points, i] + distance\\_mat[i, num\\_points] \mid i \in items })$$  <br>
+	$$min\\_round\\_trip = \min({ distance\_mat[num\_points, i] + distance\\_mat[i, num\\_points] \mid i \in items })$$  <br>
 	This variable is a stricter lower bound than $lb$ for an individual trip, representing the shortest possible round trip from the depot to any item. Every courier’s route must at least meet this minimal travel cost, ensuring that a courier who takes a route is actually performing meaningful delivery work.
 - Fairness Constraint on Route Length  <br>
 	$$| \space\max({length\\_of\\_path[c]}) - \min({length\\_of\\_path[c]}) \space| \space \le \space \lceil \frac{max\\_pl}{2} \rceil$$  <br>
@@ -103,23 +103,23 @@ In this problem our objective is to minimize the maximum traveled distance by an
 Constraints are what give meaning to the modeling formulation chosen. In the following we will have an in-detail explanation of the constraints we used on the forth modeling. 
 
 - Depot Constraints  <br>
-	$$\forall c \in couriers: sequence[c, 1] = num\\_points \quad\wedge\quad sequence[c, length\\_of\\_path[c]] = num\\_points$$
+	$$\forall c \in couriers: sequence[c, 1] = num\\_points \quad\wedge\quad sequence[c, length\\_of\\_path[c]] = num\\_points$$ <br>
 	Each courier’s route must start and end at the depot, identified by $num\_points$. The first position in the $sequence$ array ($sequence[c,1]$) is always the depot, and the last position used in that courier’s route ($sequence[c,length\_of\_path[c]]$) is also the depot. This ensures that all routes form proper round trips beginning and ending at the central depot.
 
 - Capacity Constraints  <br>
-	$$bin\\_packing\\_capa(courier\\_capacity, \space bin, \space item\\_size)$$
+	$$bin\\_packing\\_capa(courier\\_capacity, \space bin, \space item\\_size)$$ <br>
 	This constraint ensures that each courier does not exceed their carrying capacity. The $bin\\_packing\\_capa$ constraint checks item sizes assigned to each courier, ensuring the sum of those sizes does not surpass $courier\\_capacity$.
 	This predicate alone, chooses a value and its index from the courier capacity and assigns the index of that value to any slots in the bin by taking into account that the sum of the sizes of the chosen slots does not exceed the value of that index taken from the courier_capacity. This is how it assigns a courier to an item, by putting the courier number in the corresponding item house in the defined bin. 
 
 - Connecting Sequence and Bin Variables 
 	- If an item $city$ is not assigned to courier $c$ (i.e., $bin[city] \neq c$), then:  <br>
-    $$\forall j \in {2, \dots, max\\_pl-1} : sequence[c, j] \neq city$$
+    $$\forall j \in {2, \dots, max\\_pl-1} : sequence[c, j] \neq city$$ <br>
 	- If an item $city$ is assigned to courier $c$ (i.e., $bin[city] = c$), then:  <br>
-  	$$ \exists j \in {2, \dots, max\\_pl-1} : sequence[c, j] = city $$
+  	$$ \exists j \in {2, \dots, max\\_pl-1} : sequence[c, j] = city $$ <br>
 	These constraints link the $bin$ assignment variables with the $sequence$ routing variables. If a courier does not carry a particular item, that item cannot appear in their route sequence. Conversely, if a courier is responsible for an item, that item must appear exactly once in their route (somewhere between the start and end depot visits).
 
 - Defining the Length of Path  <br>
-	$$\forall c \in couriers: length\_of\_path[c] = \sum_{i \in items} (bool2int(bin[i] = c)) + 2$$
+	$$\forall c \in couriers: length\_of\_path[c] = \sum_{i \in items} (bool2int(bin[i] = c)) + 2$$ <br>
 	The route length for each courier is defined as the number of items assigned to them plus two for the start and end depot nodes. This ensures each courier’s path length accurately reflects the number of items they must deliver and the mandatory depot visits.
 
 - Beyond Path Length Must Be Zero  <br>
@@ -141,8 +141,8 @@ Constraints are what give meaning to the modeling formulation chosen. In the fol
 	The total distance traveled by each courier is calculated based on the $sequence$ of nodes visited. By summing up the distances between consecutive nodes (including the depot at start and end), we obtain the actual travel cost for that route.
 
 - Symmetry Breaking  <br>
-	$$\forall (c,k) \in couriers,\ c<k,\ courier\_capacity[c] = courier\_capacity[k]: $$  <br>
-	$$\quad lex\_lesseq([sequence[c,p] \mid p \in {1,\dots,max\_pl}], [sequence[k,p] \mid p \in {1,\dots,max\_pl}])$$  <br>
+	$$\forall (c,k) \in couriers,\ c<k,\ courier\\_capacity[c] = courier\\_capacity[k]: $$  <br>
+	$$\quad lex\\_lesseq([sequence[c,p] \mid p \in {1,\dots,max\\_pl}], [sequence[k,p] \mid p \in {1,\dots,max\\_pl}])$$  <br>
 	Symmetry breaking constraints reduce the number of equivalent solutions the solver must consider. When two couriers have the same capacity, this lexicographical ordering ensures that one courier’s route is always considered “first” or “smaller” in some consistent manner, helping the solver converge faster.
 
 
@@ -152,18 +152,18 @@ Constraints are what give meaning to the modeling formulation chosen. In the fol
 
 
 ## Search and Strategies
-The solver attempts to minimize the maximum route length ($max\_route\_found$) across all couriers. To achieve this, the solve directive uses a structured search approach, dividing the problem into stages that focus on different sets of decision variables and then employing a combination of variable and value selection strategies to guide the search.
+The solver attempts to minimize the maximum route length ($max\\_route\\_found$) across all couriers. To achieve this, the solve directive uses a structured search approach, dividing the problem into stages that focus on different sets of decision variables and then employing a combination of variable and value selection strategies to guide the search.
 
 ### Sequence Construction Phase
 Here's the chosen strategy for the sequence variable. 
 
 ```c 
 int_search(
-			[sequence[c, i] | c in couriers, i in 1..max_pl],
-			dom_w_deg,
-			indomain_random,
-			complete
-		),
+		[sequence[c, i] | c in couriers, i in 1..max_pl],
+		dom_w_deg,
+		indomain_random,
+		complete
+	),
 ```
 
 This step focuses on the $sequence$ variables, which define the actual visiting order of nodes (items and depot) for each courier. The strategy used here is:
@@ -178,16 +178,16 @@ As the second choice for solving, we choose the Item Assignment variable, the `B
 
 ```c
 int_search(         
-			[bin[i] | i in items],
-			first_fail,
-			indomain_random,
-			complete
-		),
+		[bin[i] | i in items],
+		first_fail,
+		indomain_random,
+		complete
+	),
 ```
 
 Once the structure of possible routes is in place, the search moves on to deciding how items are assigned to couriers. The $bin$ variables indicate which courier delivers each item.
-- `Variable Selection`: $first\_fail$, which selects the variable with the smallest domain first. 
-- `Value Selection`: $indomain\_random$, again ensuring that the solver tries various assignments, improving the chances of finding high-quality solutions.
+- `Variable Selection`: $first\\_fail$, which selects the variable with the smallest domain first. 
+- `Value Selection`: $indomain\\_random$, again ensuring that the solver tries various assignments, improving the chances of finding high-quality solutions.
 - `Strategy`: $complete$.
 
 
@@ -195,14 +195,14 @@ Once the structure of possible routes is in place, the search moves on to decidi
 
 ```c
 int_search(
-			length_of_path,
-			first_fail,
-			indomain_median,
-			complete
-		)
+		length_of_path,
+		first_fail,
+		indomain_median,
+		complete
+	)
 ```
 
-The final phase involves refining the $length\_of\_path$ variables, which determine how long each courier’s route will be.
+The final phase involves refining the $length\\_of\\_path$ variables, which determine how long each courier’s route will be.
 - `Variable Selection`: again focusing on the most constrained variables first.
 
 - `Value Selection`: a heuristic that picks a “middle” value from the domain. 
@@ -211,12 +211,12 @@ The final phase involves refining the $length\_of\_path$ variables, which determ
 	Additionally, we have also tried using some other interesting annotation that changes the way solver interacts with the variables and the solution it finds.
 
 - Relax and Reconstruc <br>
-	$$:: relax\_and\_reconstruct(array1d(sequence), 80)$$
+	$$:: relax\\_and\\_reconstruct(array1d(sequence), 80)$$
 	 <br>
 	Simple large neighborhood search strategy: This annotation says that upon restart, for each variable in sequence , the probability of it being fixed to the previous solution is 80 percent.
 
 - Restart Polic <br>
-	$$:: restart\_linear(num\_item)$$ 
+	$$:: restart\\_linear(num\\_item)$$ 
 	<br>
 	Restart with linear sequence scaled by `num_item`. Alternatively you could use, `restart_constant(scale)` for restarting after constant number of nodes each time `scale`, `restart_luby(scale)` for restarting with Luby sequence scaled by scale.
 
@@ -225,7 +225,7 @@ The final phase involves refining the $length\_of\_path$ variables, which determ
 	Restart search is much more robust in finding solutions, since it can avoid getting stuck in a non-productive area of the search. Note that restart search does not make much sense if the underlying search strategy does not do something different the next time it starts at the top. The simplest way to ensure that something is different in each restart is to use some randomization, either in variable choice or value choice. Alternatively some variable selection strategies make use of information gathered from earlier search and hence will give different behaviour, for example dom_w_deg.
 
 - Objective <br>
-	$$minimize\ max\_route\_found$$  
+	$$minimize\ max\\_route\\_found$$  
 	<br>
 	By applying these layered search strategies (layered with help of (`seq_search` which takes these integer search in input and applies them sequentially) — focusing first on route structure (`sequence`), then on item assignment (`bin`), and finally on route length (`length_of_path`)—and combining them with relaxation, reconstruction, and periodic restarts, the solver aims to efficiently explore the solution space. 
 
@@ -233,7 +233,7 @@ The final phase involves refining the $length\_of\_path$ variables, which determ
 
 ## Experiment and Experience
 Empirically, we understood that at the end, what matters most in achieving better results and optimal or near-optimal solutions is applying good modeling to the problem. Real-world problems, which are usually as large as the given-above-ten instances, themselves have lots of values and possibilities. Hence, it is important to implement the modeling part in a way that does not increase these variations and makes the solution more clear, easier, and accessible to the solver. In this problem, although we have tried three different ways of modeling, each of which was better than the other, at the end, the only thing that helped us the most was the heuristic approach we chose. Considering a relaxed and fair distribution of items led us toward choosing a smaller dimension in the 4th modeling, leading to significantly fewer variables for the solver. 
-Precisely speaking, with help of `Gecode Gist`, which is a solver configuration that demonstrates the search tree and especially they number of variables, we figured out that in the first modeling for the path matrix, the solver was dealing with `414720` boolean variables, which, mathematically, equals to ${num\_point} \space *  \space {num\_point} \space *  \space {num\_courier}$. This value equals to `20736` variables of domain '0..20', which in terms of variables was a significant improvement. Although one might say considering the number of values in the domain makes the equation the same, in practice, since we are applying constraint constraints to the domain of the variables, usually the available values in the domain is less than what math suggests. Math is only suggesting the values before applying any constraints. However, we cannot omit or not consider the variables, and solvers always have to find a value for them from their domain. Each variable equals to one decision. 
+Precisely speaking, with help of `Gecode Gist`, which is a solver configuration that demonstrates the search tree and especially they number of variables, we figured out that in the first modeling for the path matrix, the solver was dealing with `414720` boolean variables, which, mathematically, equals to ${num\\_point} \space *  \space {num\\_point} \space *  \space {num\\_courier}$. This value equals to `20736` variables of domain '0..20', which in terms of variables was a significant improvement. Although one might say considering the number of values in the domain makes the equation the same, in practice, since we are applying constraint constraints to the domain of the variables, usually the available values in the domain is less than what math suggests. Math is only suggesting the values before applying any constraints. However, we cannot omit or not consider the variables, and solvers always have to find a value for them from their domain. Each variable equals to one decision. 
 The result improved even more on the 3rd modeling, and we had only `2880` variables of domain `1..144`. Respectively, we were seeing and experiencing the resultt of this change in parameters based on the solutions we were getting on this and other hard instances. 
 But the game changer was the 4th modeling. In which, by applying heuristic, we achieved `200` variables with the domain of `0..144` values on INSTANCE11!
 
@@ -249,13 +249,12 @@ The following list, is the table of output based on the models. Here's a briefly
 	- This modeling, which mathematically is improved significantly on the number of the variables that solver has to deal with, is a better choice on the first 10 instances. You can get results faster and get less solution. You may also be able to get some solution on instances above 10. But, yet it is not strong enough to find optimal on those instances and you may not expect to get optimal on more than one instances.
 - Modeling 3
 	- Even though we, once again, experienced a significant change on the number of the variables, still the optimal results that we could get for instances above ten didn't change much, and we were just experiencing faster solution finding, and also one more optimality.
-- Model 4
+- Modeling 4
 	- This model achieved breakthrough results, delivering more optimal outcomes in some cases, even achieving optimal results for instances exceeding 10 in a matter of mili seconds.This is our suggested model. Hence, one downside to this model is that, it doesn't terminated on the small instance like instance 1 and instance 5 although it finds the optimality in ms. 
 
 - `*` indicates that a solution is found (Not Optimal) and program terminated
 - `**` indicates that the optimal solution is found and program terminated successfully
-- `NSol` No solution found
-- `Results` column gives the maximum value of the set of distances that each courier traveled
+- `N/A` No solution found
 
 <br><br>
 
