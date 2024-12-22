@@ -28,7 +28,7 @@ Considering that in the real world, the number of couriers is typically smaller 
 <br>
 
 ### 4th Formulation (Heuristic with Maximum Item Constraints)
-Recognizing the inherent complexity of the problem, the fourth modeling incorporated a heuristic-based approach. A practical assumption was introduced: each courier could have a maximum path length, $max\_pl$, of size $\left\lceil  \frac{num\_item}{num\_courier}  \right\rceil + 2$. Considering this new heuristic approach, we re-implemented the previous modeling with the new length for the column. This new sequence matrix is now of dimension $num\_courier \space * \space max\_pl$ where each entry takes a value pointing to a distribution point and different than previous modelings, in this modeling a path is defined as the consecutive cities that are gathered consecutively in this new matrix of $sequence$.
+Recognizing the inherent complexity of the problem, the fourth modeling incorporated a heuristic-based approach. A practical assumption was introduced: each courier could have a maximum path length, $max\\_pl$, of size $\left\lceil  \frac{num\\_item}{num\\_courier}  \right\rceil + 2$. Considering this new heuristic approach, we re-implemented the previous modeling with the new length for the column. This new sequence matrix is now of dimension $num\\_courier \space * \space max\\_pl$ where each entry takes a value pointing to a distribution point and different than previous modelings, in this modeling a path is defined as the consecutive cities that are gathered consecutively in this new matrix of $sequence$.
 
 While these assumptions may not hold for every scenario, they enabled the solver to find good solutions more quickly, demonstrating that heuristic approaches are often necessary to handle large-scale real-world instances.
 
@@ -49,8 +49,8 @@ Let's see how this last model is implemented.
 - **sequence** (`array[couriers, num_nodes] of var 0..num_points`) <br>
 	This variable defines the visiting order of distribution points for each courier.
 	- Each courier has a sequence of nodes they will visit, where each entry in the sequence array represents the next distribution point on that courier’s route.
-	- The indexing set, **num_nodes**, is chosen as a fixed upper bound on the maximum route length: 
-  	$$max\_pl = \lceil \frac{num\_item}{num\_courier} \rceil + 2.$$
+	- The indexing set, **num_nodes**, is chosen as a fixed upper bound on the maximum route length: <br>
+  	$$max\\_pl = \lceil \frac{num\\_item}{num\\_courier} \rceil + 2.$$ <br>
 	 This ensures enough “slots” to accommodate each courier’s entire route, including depot visits, however, it also oblige each courier to not take items more than this defined `max_pl` which may not be correct in all the cases.
 	- `0` is used to deactivate variables that solver must not travers.
 - **length_of_path** (`array[couriers] of var 3..max_pl`) <br>
@@ -66,83 +66,83 @@ These decision variables work together to determine how items are allocated to c
 ## Objective and Boundaries on Traveled Distance
 In this problem our objective is to minimize the maximum traveled distance by any courier.  
 
-- Objective-Related Variable (max_route_found ($max\_route\_found$))
+- Objective-Related Variable (max_route_found ($max\\_route\\_found$)) <br>
 	$$max\_route\_found = \max({ traveled\_distance[c] \mid c \in couriers })$$
 	This variable captures the longest distance traveled by any courier. By focusing on this maximum value, the solver can aim to reduce the disparity between couriers’ workloads and minimize the overall maximum route length.
 
-- lb ($lb$)
+- lb ($lb$) <br>
 	$$lb = \max({ distance\_mat[num\_points, i] + distance\_mat[i, num\_points] \mid i \in items })$$
 	This represents a lower bound on the minimum travel distance required. It is derived from the longest single round trip from the depot to an item and back. No courier can have a route shorter than this value if they are assigned at least one item.
 
-- consecutive ($consec$)
-	$$consec = \sum_{i = 1}^{1..(num\_item-1)} distance\_mat[i, i+1]$$
+- consecutive ($consec$) <br>
+	$$consec = \sum_{i = 1}^{1..(num\\_item-1)} distance\\_mat[i, i+1]$$  <br>
 	This variable aggregates the total consecutive travel distances if items were considered in a particular order. It serves as a baseline for estimating how much travel might be needed if all items were covered by a continuous path.
 
-- ub ($ub$)
-	$$ub = \lceil \frac{consec}{num\_courier} \rceil + lb$$
+- ub ($ub$)  <br>
+	$$ub = \lceil \frac{consec}{num\\_courier} \rceil + lb$$  <br>
 	The upper bound sets a limit on the maximum allowed route length for a courier. It is computed based on a division of the total consecutive distance among the number of couriers, plus the lower bound. This provides a controlled search space, ensuring that solutions with excessively long routes are not considered.
 
-- min_round_trip ($min\_round\_trip$)
-	$$min\_round\_trip = \min({ distance\_mat[num\_points, i] + distance\_mat[i, num\_points] \mid i \in items })$$
+- min_round_trip ($min\\_round\\_trip$) <br>
+	$$min\_round\\_trip = \min({ distance\_mat[num\_points, i] + distance\\_mat[i, num\\_points] \mid i \in items })$$  <br>
 	This variable is a stricter lower bound than $lb$ for an individual trip, representing the shortest possible round trip from the depot to any item. Every courier’s route must at least meet this minimal travel cost, ensuring that a courier who takes a route is actually performing meaningful delivery work.
-- Fairness Constraint on Route Length
-	$$| \space\max({length\_of\_path[c]}) - \min({length\_of\_path[c]}) \space| \space \le \space \lceil \frac{max\_pl}{2} \rceil$$
+- Fairness Constraint on Route Length  <br>
+	$$| \space\max({length\\_of\\_path[c]}) - \min({length\\_of\\_path[c]}) \space| \space \le \space \lceil \frac{max\\_pl}{2} \rceil$$  <br>
 	This constraint ensures that the difference between the longest and shortest paths (in terms of number of nodes visited) assigned to couriers is not excessively large. By limiting this gap, the solution encourages a more balanced workload distribution among couriers.
 
-- Objective Boundaries
-	$$max\_route\_found \ge lb \quad\wedge\quad max\_route\_found \le ub$$
+- Objective Boundaries <br>
+	$$max\\_route\\_found \ge lb \quad\wedge\quad max\\_route\\_found \le ub$$  <br>
 	This ensures that the maximum route found by any courier remains within the predefined lower and upper bounds. As a result, the solver avoids exploring solutions that are too short to be feasible or too long to be practical.
 
 - Travel Distance Bounds for Each Courier
-	For each courier $c$:
-	$$traveled\_distance[c] \ge min\_round\_trip$$
-	$$traveled\_distance[c] \le ub$$
+	For each courier $c$: <br>
+	$$traveled\\_distance[c] \ge min\\_round\\_trip$$  <br>
+	$$traveled\\_distance[c] \le ub$$ <br>
 	The lower bound ensures that every courier’s assigned route is at least as long as the shortest possible round trip to an item and back, preventing trivial or empty routes. The upper bound ensures no courier’s route exceeds the calculated upper bound, keeping solutions focused and within reasonable limits.
 
 ## Constraints
 Constraints are what give meaning to the modeling formulation chosen. In the following we will have an in-detail explanation of the constraints we used on the forth modeling. 
 
-- Depot Constraints
-	$$\forall c \in couriers: sequence[c, 1] = num\_points \quad\wedge\quad sequence[c, length\_of\_path[c]] = num\_points$$
+- Depot Constraints  <br>
+	$$\forall c \in couriers: sequence[c, 1] = num\\_points \quad\wedge\quad sequence[c, length\\_of\\_path[c]] = num\\_points$$
 	Each courier’s route must start and end at the depot, identified by $num\_points$. The first position in the $sequence$ array ($sequence[c,1]$) is always the depot, and the last position used in that courier’s route ($sequence[c,length\_of\_path[c]]$) is also the depot. This ensures that all routes form proper round trips beginning and ending at the central depot.
 
-- Capacity Constraints
-	$$bin\_packing\_capa(courier\_capacity, \space bin, \space item\_size)$$
-	This constraint ensures that each courier does not exceed their carrying capacity. The $bin\_packing\_capa$ constraint checks item sizes assigned to each courier, ensuring the sum of those sizes does not surpass $courier\_capacity$.
+- Capacity Constraints  <br>
+	$$bin\\_packing\\_capa(courier\\_capacity, \space bin, \space item\\_size)$$
+	This constraint ensures that each courier does not exceed their carrying capacity. The $bin\\_packing\\_capa$ constraint checks item sizes assigned to each courier, ensuring the sum of those sizes does not surpass $courier\\_capacity$.
 	This predicate alone, chooses a value and its index from the courier capacity and assigns the index of that value to any slots in the bin by taking into account that the sum of the sizes of the chosen slots does not exceed the value of that index taken from the courier_capacity. This is how it assigns a courier to an item, by putting the courier number in the corresponding item house in the defined bin. 
 
-- Connecting Sequence and Bin Variables
-	- If an item $city$ is not assigned to courier $c$ (i.e., $bin[city] \neq c$), then: 
-    $$\forall j \in {2, \dots, max\_pl-1} : sequence[c, j] \neq city$$
-	- If an item $city$ is assigned to courier $c$ (i.e., $bin[city] = c$), then: 
-  	$$ \exists j \in {2, \dots, max\_pl-1} : sequence[c, j] = city $$
+- Connecting Sequence and Bin Variables 
+	- If an item $city$ is not assigned to courier $c$ (i.e., $bin[city] \neq c$), then:  <br>
+    $$\forall j \in {2, \dots, max\\_pl-1} : sequence[c, j] \neq city$$
+	- If an item $city$ is assigned to courier $c$ (i.e., $bin[city] = c$), then:  <br>
+  	$$ \exists j \in {2, \dots, max\\_pl-1} : sequence[c, j] = city $$
 	These constraints link the $bin$ assignment variables with the $sequence$ routing variables. If a courier does not carry a particular item, that item cannot appear in their route sequence. Conversely, if a courier is responsible for an item, that item must appear exactly once in their route (somewhere between the start and end depot visits).
 
-- Defining the Length of Path
+- Defining the Length of Path  <br>
 	$$\forall c \in couriers: length\_of\_path[c] = \sum_{i \in items} (bool2int(bin[i] = c)) + 2$$
 	The route length for each courier is defined as the number of items assigned to them plus two for the start and end depot nodes. This ensures each courier’s path length accurately reflects the number of items they must deliver and the mandatory depot visits.
 
-- Beyond Path Length Must Be Zero
-	$$\forall c \in couriers,\ \forall i \in {length\_of\_path[c]+1,\dots,max\_pl} : sequence[c, i] = 0$$
+- Beyond Path Length Must Be Zero  <br>
+	$$\forall c \in couriers,\ \forall i \in {length\\_of\_path[c]+1,\dots,max\\_pl} : sequence[c, i] = 0$$  <br>
 	Any positions in the $sequence$ array beyond a courier’s determined path length are set to zero. This enforces that no “extra” travel nodes are used, ensuring the model does not consider unnecessary or unused slots in the route representation.
 
-- Global Constraints
-	- All-Different Constraint for Each Courier’s Route 
-  		$$\forall c \in couriers: alldifferent({sequence[c, city] \mid city \in {1,\dots,length\_of\_path[c]-1}})$$
+- Global Constraints 
+	- All-Different Constraint for Each Courier’s Route  <br>
+  		$$\forall c \in couriers: alldifferent({sequence[c, city] \mid city \in {1,\dots,length\\_of\\_path[c]-1}})$$  <br>
 		Except for the depot, each visited node/item must be unique in a single courier’s route. This prevents visiting the same item multiple times and ensures a proper path structure.
 	
-	- Ensuring All Visited Cities for Different Couriers are Different
-		$$\forall c \in couriers: alldifferent({sequence[c, city] \mid city \in {2,\dots,\min({length\_of\_path[k] \mid k \in couriers})-1}})$$
+	- Ensuring All Visited Cities for Different Couriers are Different  <br>
+		$$\forall c \in couriers: alldifferent({sequence[c, city] \mid city \in {2,\dots,\min({length\\_of\\_path[k] \mid k \in couriers})-1}})$$  <br>
 		Across the set of couriers, all items must collectively form a set of unique visits. This constraint somehow ensures full item coverage without duplication.
 
-- Distance Calculation Constraints 
-  	$$\forall c \in couriers: traveled\_distance[c] = $$ 
-	$$\sum_{i=1}^{length\_of\_path[c]-1} distance\_mat[sequence[c, i], sequence[c, i+1]]$$
+- Distance Calculation Constraints  <br>
+  	$$\forall c \in couriers: traveled\\_distance[c] =$$  <br>
+	$$\sum_{i=1}^{length\\_of\\_path[c]-1} distance\\_mat[sequence[c, i], sequence[c, i+1]]$$  <br>
 	The total distance traveled by each courier is calculated based on the $sequence$ of nodes visited. By summing up the distances between consecutive nodes (including the depot at start and end), we obtain the actual travel cost for that route.
 
-- Symmetry Breaking
-	$$\forall (c,k) \in couriers,\ c<k,\ courier\_capacity[c] = courier\_capacity[k]: $$
-	$$\quad lex\_lesseq([sequence[c,p] \mid p \in {1,\dots,max\_pl}], [sequence[k,p] \mid p \in {1,\dots,max\_pl}])$$
+- Symmetry Breaking  <br>
+	$$\forall (c,k) \in couriers,\ c<k,\ courier\_capacity[c] = courier\_capacity[k]: $$  <br>
+	$$\quad lex\_lesseq([sequence[c,p] \mid p \in {1,\dots,max\_pl}], [sequence[k,p] \mid p \in {1,\dots,max\_pl}])$$  <br>
 	Symmetry breaking constraints reduce the number of equivalent solutions the solver must consider. When two couriers have the same capacity, this lexicographical ordering ensures that one courier’s route is always considered “first” or “smaller” in some consistent manner, helping the solver converge faster.
 
 
