@@ -219,14 +219,11 @@ The final phase involves refining the $length\\_of\\_path$ variables, which dete
 	$$:: restart\\_linear(num\\_item)$$ 
 	<br>
 	Restart with linear sequence scaled by `num_item`. Alternatively you could use, `restart_constant(scale)` for restarting after constant number of nodes each time `scale`, `restart_luby(scale)` for restarting with Luby sequence scaled by scale.
-
 	<br>
-
 	Restart search is much more robust in finding solutions, since it can avoid getting stuck in a non-productive area of the search. Note that restart search does not make much sense if the underlying search strategy does not do something different the next time it starts at the top. The simplest way to ensure that something is different in each restart is to use some randomization, either in variable choice or value choice. Alternatively some variable selection strategies make use of information gathered from earlier search and hence will give different behaviour, for example dom_w_deg.
 
 - Objective <br>
-	$$minimize\ max\\_route\\_found$$  
-	<br>
+	$$minimize\ max\\_route\\_found$$ <br>
 	By applying these layered search strategies (layered with help of (`seq_search` which takes these integer search in input and applies them sequentially) — focusing first on route structure (`sequence`), then on item assignment (`bin`), and finally on route length (`length_of_path`)—and combining them with relaxation, reconstruction, and periodic restarts, the solver aims to efficiently explore the solution space. 
 
 <br><br>
@@ -270,14 +267,14 @@ The following list, is the table of output based on the models. Here's a briefly
 | 8 | 186 `**` | 186 `**` | 186 `**` | 186 `**` | 186 `**` | 186 `**` | 186 `**` | 186 `**` | 186 `**` | 186 `**` | 186 `**` | 186 `**` | 186 `**` | 186 `**` | 186 `**` |
 | 9 | N/A `*` | 436 `**` | 436 `**` | 436 `**` | 436 `**` | 436 `**` | 436 `**` | 436 `**` | 436 `**` | 436 `**` | 436 `**` | 436 `**` | 436 `**` | 436 `**` | 436 `**` |
 | 10 | N/A `*` | 244 `**` | 244 `**` | 244 `**` | 244 `**` | 244 `**` | 244 `**` | 244 `**` | 244 `**` | 244 `**` | 244 `**` | 244 `**` | 244 `**` | 244 `**` | 244 `**` |
-| 11 | N/A `*` | N/A `*` | N/A `*` | 926 `*` | N/A `*` | N/A `*` | 505 `*` | N/A `*` | 918 `*` | 773 `*` | N/A `*` | 305 `*` | N/A `*` | 305 `*` | 698 `*` |
-| 12 | N/A `*` | N/A `*` | N/A `*` | N/A `*` | N/A `*` | N/A `*` | 346 `**` | N/A `*` | 662 `*` | 495 `*` | 610 `*` | 346 `**` | 610 `*` | 346 `**` | 370 `*` |
-| 13 | N/A `*` | N/A `*` | 838 `*` | 1148 `*` | N/A `*` | 1420 `*` | 452 `*` | 1500 `*` | 1388 `*` | 1054 `*` | 1236 `*` | 454 `*` | 1236 `*` | 442 `*` | 1036 `*` |
-| 14 | N/A `*` | N/A `*` | N/A `*` | N/A `*` | N/A `*` | N/A `*` | 762 `*` | N/A `*` | N/A `*` | N/A `*` | N/A `*` | 491 `*` | N/A `*` | 461 `*` | 1096 `*` |
-| 15 | N/A `*` | N/A `*` | N/A `*` | N/A `*` | N/A `*` | N/A `*` | 818 `*` | N/A `*` | N/A `*` | N/A `*` | N/A `*` | 581 `*` | N/A `*` | N/A `*` | 1088 `*` |
+| 11 | N/A `*` | N/A `*` | N/A `*` | 926 `*` | N/A `*` | N/A `*` | 505 `*` | N/A `*` | 918 `*` | 693 `*` | N/A `*` | 305 `*` | N/A `*` | 304 `*` | 704 `*` |
+| 12 | N/A `*` | N/A `*` | N/A `*` | N/A `*` | N/A `*` | N/A `*` | 346 `**` | N/A `*` | 662 `*` | 495 `*` | 516 `*` | 346 `**` | 516 `*` | 346 `**` | 367 `*` |
+| 13 | N/A `*` | N/A `*` | 838 `*` | 1148 `*` | N/A `*` | 1420 `*` | 452 `*` | 1500 `*` | 1388 `*` | 1036 `*` | 1150 `*` | 480 `*` | 1150 `*` | 482 `*` | 1000 `*` |
+| 14 | N/A `*` | N/A `*` | N/A `*` | N/A `*` | N/A `*` | N/A `*` | 762 `*` | N/A `*` | N/A `*` | N/A `*` | N/A `*` | 487 `*` | N/A `*` | 506 `*` | 1102 `*` |
+| 15 | N/A `*` | N/A `*` | N/A `*` | N/A `*` | N/A `*` | N/A `*` | 818 `*` | N/A `*` | N/A `*` | N/A `*` | N/A `*` | 638 `*` | N/A `*` | N/A `*` | 1144 `*` |
 | 16 | 785 `*` | N/A `*` | N/A `*` | 382 `*` | N/A `*` | N/A `*` | 286 `**` | 325 `*` | 375 `*` | 286 `**` | 286 `**` | 286 `**` | 286 `**` | 286 `**` | 286 `**` |
-| 17 | N/A `*` | N/A `*` | N/A `*` | N/A `*` | N/A `*` | N/A `*` | 1518 `*` | N/A `*` | N/A `*` | N/A `*` | N/A `*` | N/A `*` | N/A `*` | 1221 `*` | N/A `*` |
-| 18 | N/A `*` | N/A `*` | N/A `*` | N/A `*` | N/A `*` | N/A `*` | 647 `*` | N/A `*` | N/A `*` | 959 `*` | N/A `*` | 389 `*` | N/A `*` | 360 `*` | 887 `*` |
-| 19 | N/A `*` | N/A `*` | N/A `*` | 595 `*` | N/A `*` | N/A `*` | 334 `**` | N/A `*` | 597 `*` | 334 `**` | 450 `*` | 334 `**` | 450 `*` | 334 `**` | 334 `**` |
+| 17 | N/A `*` | N/A `*` | N/A `*` | N/A `*` | N/A `*` | N/A `*` | 1518 `*` | N/A `*` | N/A `*` | N/A `*` | N/A `*` | 1177 `*` | N/A `*` | N/A `*` | 1565 `*` |
+| 18 | N/A `*` | N/A `*` | N/A `*` | N/A `*` | N/A `*` | N/A `*` | 647 `*` | N/A `*` | N/A `*` | N/A `*` | N/A `*` | 355 `*` | N/A `*` | 345 `*` | 900 `*` |
+| 19 | N/A `*` | N/A `*` | N/A `*` | 595 `*` | N/A `*` | N/A `*` | 334 `**` | N/A `*` | 597 `*` | 334 `**` | 437 `*` | 334 `**` | 437 `*` | 334 `**` | 334 `**` |
 | 20 | N/A `*` | N/A `*` | N/A `*` | N/A `*` | N/A `*` | N/A `*` | N/A `*` | N/A `*` | N/A `*` | N/A `*` | N/A `*` | N/A `*` | N/A `*` | N/A `*` | N/A `*` |
-| 21 | N/A `*` | N/A `*` | N/A `*` | N/A `*` | N/A `*` | N/A `*` | 525 `*` | N/A `*` | 1070 `*` | 854 `*` | N/A `*` | 374 `**` | N/A `*` | 374 `**` | 756 `*` |
+| 21 | N/A `*` | N/A `*` | N/A `*` | N/A `*` | N/A `*` | N/A `*` | 525 `*` | N/A `*` | 1070 `*` | 858 `*` | N/A `*` | 374 `**` | N/A `*` | 374 `**` | 737 `*` |
